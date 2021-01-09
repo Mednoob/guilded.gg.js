@@ -1,4 +1,6 @@
 import { Client } from "../../client/Client";
+import { User } from "../user/User";
+import axios from "axios";
 
 export class Message {
   /**
@@ -16,7 +18,7 @@ export class Message {
    * Updates this message
    * @param {Record<string, any>} data
    */
-  update(data) {
+  async update(data) {
     /**
      * The ID of the message
      * @type {string}
@@ -46,6 +48,12 @@ export class Message {
      * @type {string[]}
      */
     this.content = this.getMessageContent(data.message.content);
+
+    /**
+    * The User object of the author of the message
+    * @type {User}
+    */
+    this.author = new User((await axios.get(`https://api.guilded.gg/users/${this.creator}`)).data)
   }
 
   /**
